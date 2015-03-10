@@ -1,4 +1,4 @@
-__author__ "@netmanchris"
+
 #   IMC Server Build Project 1.0
 #  Chris Young a.k.a Darth
 #
@@ -11,33 +11,68 @@ __author__ "@netmanchris"
 #the eAPI function. The eAPI is available natively on the IMC enterprise edition
 #and can be added to the standard edition through the purchase of the eAPI addon license.
 
-#This section contains global variables
-imc_protocol = None
-imc_server = None
-imc_port = None
-imc_user = None
-imc_pw = None
-imc_app =
+#This section imports required libraries
+import requests, json, sys, time, subprocess
+from requests.auth import HTTPDigestAuth
+
+
+#url header to preprend on all IMC eAPI calls
+url = None
+
+#auth handler for eAPI calls
+auth = None
+
+#headers forcing IMC to respond with JSON content. XML content return is the default
 headers = {'Accept': 'application/json', 'Content-Type': 'application/json','Accept-encoding': 'application/json'}
-Def imc_creds():
-    global imc_protocol, imc_ip,imc_port, imc_user, imc_pw
-    imc_protocol = input("What is the protocol of the IMC server? http/https:)
+
+
+
+
+
+
+#This sections contains helper functions leveraged by other other functions
+
+def imc_creds():
+    ''' This function prompts user for IMC server information and credentuials and stores
+    values in url and auth global variables'''
+    global url, auth, r
+    imc_protocol = input("What protocol would you like to use to connect to the IMC server: \n Press 1 for HTTP: \n Press 2 for HTTPS:")
+    if imc_protocol == "1":
+        h_url = 'http://'
+    else:
+        h_url = 'https://'
     imc_server = input("What is the ip address of the IMC server?")
     imc_port = input("What is the port number of the IMC server?")
     imc_user = input("What is the username of the IMC eAPI user?")
     imc_pw = input("What is the password of the IMC eAPI user?")
-
-Def main():            
+    url = h_url+imc_server+":"+imc_port
+    auth = requests.auth.HTTPDigestAuth(imc_user,imc_pw)
+    test_url = '/imcrs'
+    f_url = url+test_url
+    try:
+        r = requests.get(f_url, auth=auth, headers=headers)
+    except requests.exceptions.RequestException as e:     #checks for reqeusts exceptions
+            print ("Error:\n"+str(e))
+            print ("\n\nThe IMC server address is invalid. Please try again\n\n")
+            imc_creds()
+    if r.status_code != 200:      #checks for valid IMC credentials
+        print ("Error: \n You're credentials are invalid. Please try again\n\n")
+        imc_creds()
+    else:
+        print ("You've successfully access the IMC eAPI")
+    
+    
+#Defines the program to be run
+        
+def main():            
     createoperator = input("Do you wish to create IMC Operators? Y/N:")
     if createoperator == "Y" or createoperator == "y":
         create_operator()
 
-Def create_operator():
-    if imc_protocol == None:
-            imc_creds()
     
     
 
 
-
+if __name__ == "-__main__":
+    main()
 
