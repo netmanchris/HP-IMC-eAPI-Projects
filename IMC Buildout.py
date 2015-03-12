@@ -12,7 +12,7 @@
 #and can be added to the standard edition through the purchase of the eAPI addon license.
 
 #This section imports required libraries
-import requests, json, sys, time, subprocess
+import requests, json, sys, time, subprocess, csv
 from requests.auth import HTTPDigestAuth
 
 
@@ -25,9 +25,20 @@ auth = None
 #headers forcing IMC to respond with JSON content. XML content return is the default
 headers = {'Accept': 'application/json', 'Content-Type': 'application/json','Accept-encoding': 'application/json'}
 
-
-
-
+def create_operator():
+    if auth == None or url == None:     #checks to see if the imc credentials are already available
+        imc_creds()
+    create_operator_url = '/imcrs/plat/operator'
+    f_url = url+create_operator_url
+    with open ('imc_operator_list.csv') as csvfile:      #opens imc_operator_list.csv file
+        reader = csv.DictReader(csvfile)        #decodes file as csv as a python dictionary
+        for operator in reader:
+            payload = json.dumps(operator, indent=4)      #loads each row of the CSV as a JSON string
+            r = requests.post(f_url, data=payload, auth=auth, headers=headers)   #creates the URL using the payload variable as the contents 
+            if r.status_code == 409:        
+                print ("Operator Already Exists")
+            elif r.status_code == 201:
+                print ("Operator Successfully Created")
 
 
 #This sections contains helper functions leveraged by other other functions
@@ -73,6 +84,6 @@ def main():
     
 
 
-if __name__ == "-__main__":
+if __name__ == "__main__":
     main()
 
