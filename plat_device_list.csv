@@ -40,3 +40,8 @@ nameOrIp,mask,loopbackAsMgrIp,supportPing,registerTrap,forceAdd,label,loginType,
 10.101.0.6,255.255.255.0,true,true,true,true,,1,,SNMPv1,public,private,10,10,,1,admin,#kgf3og#,,5
 10.101.0.7,255.255.255.0,true,true,true,true,,1,,SNMPv1,public,private,10,10,,1,admin,#kgf3og#,,5
 10.101.0.8,255.255.255.0,true,true,true,true,,1,,SNMPv1,public,private,10,10,,1,admin,#kgf3og#,,5
+10.11.10.10.,255.255.255.0,true,true,true,true,,1,,SNMPv1,public,private,10,10,,1,admin,#kgf3og#,,5
+10.102.1.222,255.255.255.0,true,true,true,true,,1,,SNMPv1,public,private,10,10,,1,admin,#kgf3og#,,5
+10.12.10.10,255.255.255.0,true,true,true,true,,1,,SNMPv1,public,private,10,10,,1,admin,#kgf3og#,,5
+10.101.0.141,255.255.255.0,true,true,true,true,,1,,SNMPv1,public,private,10,10,,1,admin,#kgf3og#,,5
+10.101.0.139,255.255.255.0,true,true,true,true,,1,,SNMPv1,public,private,10,10,,1,admin,#kgf3og#,,5
