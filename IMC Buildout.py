@@ -55,7 +55,7 @@ def imc_creds():
     imc_server = input("What is the ip address of the IMC server?")
     imc_port = input("What is the port number of the IMC server?")
     imc_user = input("What is the username of the IMC eAPI user?")
-    imc_pw = input("What is the password of the IMC eAPI user?")
+    imc_pw = input('''What is the password of the IMC eAPI user?''')
     url = h_url+imc_server+":"+imc_port
     auth = requests.auth.HTTPDigestAuth(imc_user,imc_pw)
     test_url = '/imcrs'
