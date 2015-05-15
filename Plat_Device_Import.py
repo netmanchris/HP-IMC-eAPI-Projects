@@ -25,12 +25,12 @@ auth = None
 #headers forcing IMC to respond with JSON content. XML content return is the default
 headers = {'Accept': 'application/json', 'Content-Type': 'application/json','Accept-encoding': 'application/json'}
 
-def plat_import_dervice():
+def add_custom_view():
     if auth == None or url == None:     #checks to see if the imc credentials are already available
         imc_creds()
-    add_device_url = '/imcrs/plat/res/device'
+    add_device_url = 'http://10.3.10.230:8080/imcrs/plat/res/view/custom'
     f_url = url+add_device_url
-    with open ('plat_device_list.csv') as csvfile:      #opens imc_operator_list.csv file
+    with open ('custom_view_list.csv') as csvfile:      #opens imc_operator_list.csv file
         reader = csv.DictReader(csvfile)        #decodes file as csv as a python dictionary
         for device in reader:
             if int(device['authType']) == 1:

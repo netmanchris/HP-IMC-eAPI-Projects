@@ -62,7 +62,7 @@ def imc_creds():
     f_url = url+test_url
     try:
         r = requests.get(f_url, auth=auth, headers=headers)
-    except requests.exceptions.RequestException as e:     #checks for reqeusts exceptions
+    except requests.exceptions.RequestException as e:     #checks for requests exceptions
             print ("Error:\n"+str(e))
             print ("\n\nThe IMC server address is invalid. Please try again\n\n")
             imc_creds()

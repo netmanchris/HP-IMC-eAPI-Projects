@@ -1,4 +1,5 @@
-#  IMC Server Build Project 1.0
+
+#   IMC Server Build Project 1.0
 #  Chris Young a.k.a Darth
 #
 #Hewlett Packard Company    Revision 1.0
@@ -24,39 +25,25 @@ auth = None
 #headers forcing IMC to respond with JSON content. XML content return is the default
 headers = {'Accept': 'application/json', 'Content-Type': 'application/json','Accept-encoding': 'application/json'}
 
-
-
-
-#Create Custom Views from IP Address Ranges
-
-#Gather Custom View Name from the User
-
-#Gather the IP Networks desired from the User
-    #user input " 192.168.1.0/24"  or "192.168.0 255.255.255.0"?
-    #use ipaddress to identify the network portion of the address
-
-
-#Query the IP Views and gather DevIDs for all devices in the list, append to DevList
-    #for append to list, check to see if the DevId is already in the list
-
-#Create Custom View
-    #prompt for custom view name
-     ''' function to gather all the custom view names and view ids and add them display them to a list'''
-     custom_view_id = CALL THE GET CUSTOM VIEW FUNCTION TO FIGURE THIS OUT
-    # for i in DevList add to the CreateCustomView message body
-
-#json content tested with API
-
-    modify_custom_view_url = '''/imcrs/plat/res/view/custom/'''+custom_view_id
-    payload = {
-  "device": [
-    {
-      "id": 157"
-    }
-    ]
-}
-
-
+def change_dev_category():
+    global dev_list
+    dev_list = filter_dev_category()
+    for dev in dev_list:
+        print ("system name: "+ dev['sysName']+'\nCurrent Category: '+dev['devCategoryImgSrc']+
+               '\nIP address: '+ dev['ip']+'\nSystem Description: '+dev['sysDescription']+ '\n\n')
+    print_dev_category()
+    cat_id = input("What is the category to which you want to move the selected device: ")
+    for i in dev_list:
+        dev_id = i["id"]
+        change_dev_cat_url = "/imcrs/plat/res/device/"+dev_id+"/updateCategory"
+        f_url = url + change_dev_cat_url
+        payload = '''{ "categoryId" : "'''+cat_id+'''" }'''
+        r = requests.put(f_url, data=payload, auth=auth, headers=headers)   #creates the URL using the payload variable as the contents
+        if r.status_code == 204:
+            continue  
+        else:
+         print (r.status_code)
+         print ("An Error has occured")
 
 def filter_dev_category():
     if auth == None or url == None:  # checks to see if the imc credentials are already available
@@ -88,21 +75,35 @@ def filter_dev_category():
          return dev_list
     else:
          print ("An Error has occured")
+        
+                         
+        
+        
+
+def print_dev_category():
+    categories = [{"categoryId":"0", "dev_type":"router"},
+              {"categoryId":"1", "dev_type":"switch"},
+              {"categoryId":"2", "dev_type":"server"},
+              {"categoryId":"3", "dev_type":"security"},
+              {"categoryId":"4", "dev_type":'storage' },
+              {"categoryId":"5", "dev_type":"wireless"},
+              {"categoryId":"6", "dev_type": "voice"},
+              {"categoryId":"7", "dev_type":'printer'},
+              {"categoryId":"8", "dev_type":'ups'},
+              {"categoryId":"9", "dev_type":"desktop"},
+              {"categoryId":"10", "dev_type":"other"},
+              {"categoryId":"11", "dev_type":"surveillance"},
+              {"categoryId":"12", "dev_type":"video"},
+              {"categoryId":"13", "dev_type":"module"},
+              {"categoryId":"14", "dev_type":"virtualdev"},
+	      {"categoryId":"15", "dev_type":"Load Balancer"},
+              {"categoryId":"16", "dev_type":"sdn_ctrl"}
+              ]
+    for i in categories:
+        print ("For "+i["dev_type"]+", Please press: "+i["categoryId"])
     
 
 
-
-def get_custom_views():
-    if auth == None or url == None:  # checks to see if the imc credentials are already available
-        imc_creds()
-    get_custom_view_url = '/imcrs/plat/res/view/custom?resPrivilegeFilter=false&desc=false&total=false'
-    f_url = url + get_custom_view_url
-    r = requests.get(f_url, auth=auth, headers=headers)   #creates the URL using the payload variable as the contents 
-    if r.status_code == 200:
-         view_list = (json.loads(r.text))["customView"]
-         return view_list
-    else:
-         print ("An Error has occured")
 
 
 
@@ -141,8 +142,14 @@ def imc_creds():
 #Defines the program to be run
         
 def main():            
-    add_device = input("Do you wish to perform an auto-discovery now? Y/N:")
+    add_device = input("Do you wish to change device categories now? Y/N:")
     if add_device.lower() == "y":
-        plat_auto_discover()
+        change_dev_category()
 
     
+    
+
+
+if __name__ == "__main__":
+    main()
+

@@ -1,4 +1,5 @@
-#  IMC Server Build Project 1.0
+
+#   IMC Server Build Project 1.0
 #  Chris Young a.k.a Darth
 #
 #Hewlett Packard Company    Revision 1.0
@@ -26,72 +27,6 @@ headers = {'Accept': 'application/json', 'Content-Type': 'application/json','Acc
 
 
 
-
-#Create Custom Views from IP Address Ranges
-
-#Gather Custom View Name from the User
-
-#Gather the IP Networks desired from the User
-    #user input " 192.168.1.0/24"  or "192.168.0 255.255.255.0"?
-    #use ipaddress to identify the network portion of the address
-
-
-#Query the IP Views and gather DevIDs for all devices in the list, append to DevList
-    #for append to list, check to see if the DevId is already in the list
-
-#Create Custom View
-    #prompt for custom view name
-     ''' function to gather all the custom view names and view ids and add them display them to a list'''
-     custom_view_id = CALL THE GET CUSTOM VIEW FUNCTION TO FIGURE THIS OUT
-    # for i in DevList add to the CreateCustomView message body
-
-#json content tested with API
-
-    modify_custom_view_url = '''/imcrs/plat/res/view/custom/'''+custom_view_id
-    payload = {
-  "device": [
-    {
-      "id": 157"
-    }
-    ]
-}
-
-
-
-def filter_dev_category():
-    if auth == None or url == None:  # checks to see if the imc credentials are already available
-        imc_creds()
-    global r
-    category = None
-    ip_range = None
-    get_dev_list_url = None
-    filter_by_cat = input("Do you want to filter by device category?\nY/N: ")
-    if filter_by_cat.lower() == "y":
-        print_dev_category()
-        category = input("Please select the device category: ")
-        get_dev_list_url = ("/imcrs/plat/res/device?resPrivilegeFilter=false&category="+category+"&start=0&size=10000&orderBy=id&desc=false&total=false")
-        #return get_dev_list_url
-    filter_by_ip = input("Do you want to filter by IP address network range?\nY/N: ")
-    if filter_by_ip.lower() == "y":
-        ip_range = input("What is the ip network range?\n Example: 10.101.16.\nFuzzy search is acceptible: ")
-        if category == None:
-            get_dev_list_url = ("/imcrs/plat/res/device?resPrivilegeFilter=false&ip="+ip_range+"&start=0&size=5&orderBy=id&desc=false&total=false")
-        else:
-            get_dev_list_url = ("/imcrs/plat/res/device?resPrivilegeFilter=false&category="+category+"&ip="+ip_range+"&start=0&size=10000&orderBy=id&desc=false&total=false")
-    f_url = url + get_dev_list_url
-    
-    payload = None
-    r = requests.get(f_url, auth=auth, headers=headers)   #creates the URL using the payload variable as the contents
-    r.status_code
-    if r.status_code == 200:
-         dev_list = (json.loads(r.text))["device"]
-         return dev_list
-    else:
-         print ("An Error has occured")
-    
-
-
-
 def get_custom_views():
     if auth == None or url == None:  # checks to see if the imc credentials are already available
         imc_creds()
@@ -103,7 +38,6 @@ def get_custom_views():
          return view_list
     else:
          print ("An Error has occured")
-
 
 
 #This sections contains helper functions leveraged by other other functions
@@ -146,3 +80,9 @@ def main():
         plat_auto_discover()
 
     
+    
+
+
+if __name__ == "__main__":
+    main()
+
