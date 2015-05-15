@@ -31,6 +31,10 @@ headers = {'Accept': 'application/json', 'Content-Type': 'application/json','Acc
 
 #Gather Custom View Name from the User
 
+def new_custom_view():
+    custom_view_name = input("Please type the name of the new custom view: ")
+    
+
 #Gather the IP Networks desired from the User
     #user input " 192.168.1.0/24"  or "192.168.0 255.255.255.0"?
     #use ipaddress to identify the network portion of the address
@@ -41,21 +45,34 @@ headers = {'Accept': 'application/json', 'Content-Type': 'application/json','Acc
 
 #Create Custom View
     #prompt for custom view name
-     ''' function to gather all the custom view names and view ids and add them display them to a list'''
-     custom_view_id = CALL THE GET CUSTOM VIEW FUNCTION TO FIGURE THIS OUT
+     #''' function to gather all the custom view names and view ids and add them display them to a list'''
+     #custom_view_id = CALL THE GET CUSTOM VIEW FUNCTION TO FIGURE THIS OUT
     # for i in DevList add to the CreateCustomView message body
 
 #json content tested with API
 
-    modify_custom_view_url = '''/imcrs/plat/res/view/custom/'''+custom_view_id
-    payload = {
-  "device": [
-    {
-      "id": 157"
-    }
-    ]
-}
+#    modify_custom_view_url = '''/imcrs/plat/res/view/custom/'''+custom_view_id
+#    payload = {
+#  "device": [
+#    {
+#      "id": 157"
+#    }
+#    ]
+#}
 
+
+def create_new_view():
+    view_name = input("Please input the name of the new view: ")
+    add_view_url = "/imcrs/plat/res/view/custom?resPrivilegeFilter=false&desc=false&total=false"
+    f_url = url + add_view_url
+    payload = '''{ "name": "'''+view_name+'''", "autoAddDevType" : "0"}'''
+    r = requests.post(f_url, data = payload, auth=auth, headers=headers)   #creates the URL using the payload variable as the contents
+    r.status_code
+    if r.status_code == 201:
+         return
+    else:
+         print ("An Error has occured")
+    
 
 
 def filter_dev_category():
