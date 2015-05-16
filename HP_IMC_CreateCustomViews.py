@@ -31,24 +31,7 @@ headers = {'Accept': 'application/json', 'Content-Type': 'application/json','Acc
 
 #Gather Custom View Name from the User
 
-def new_custom_view():
-    custom_view_name = input("Please type the name of the new custom view: ")
     
-
-#Gather the IP Networks desired from the User
-    #user input " 192.168.1.0/24"  or "192.168.0 255.255.255.0"?
-    #use ipaddress to identify the network portion of the address
-
-
-#Query the IP Views and gather DevIDs for all devices in the list, append to DevList
-    #for append to list, check to see if the DevId is already in the list
-
-#Create Custom View
-    #prompt for custom view name
-     #''' function to gather all the custom view names and view ids and add them display them to a list'''
-     #custom_view_id = CALL THE GET CUSTOM VIEW FUNCTION TO FIGURE THIS OUT
-    # for i in DevList add to the CreateCustomView message body
-
 
 
 def populate_new_view():
@@ -153,6 +136,30 @@ def find_a_view():
 
 #This sections contains helper functions leveraged by other other functions
 
+def print_dev_category():
+    categories = [{"categoryId":"0", "dev_type":"router"},
+              {"categoryId":"1", "dev_type":"switch"},
+              {"categoryId":"2", "dev_type":"server"},
+              {"categoryId":"3", "dev_type":"security"},
+              {"categoryId":"4", "dev_type":'storage' },
+              {"categoryId":"5", "dev_type":"wireless"},
+              {"categoryId":"6", "dev_type": "voice"},
+              {"categoryId":"7", "dev_type":'printer'},
+              {"categoryId":"8", "dev_type":'ups'},
+              {"categoryId":"9", "dev_type":"desktop"},
+              {"categoryId":"10", "dev_type":"other"},
+              {"categoryId":"11", "dev_type":"surveillance"},
+              {"categoryId":"12", "dev_type":"video"},
+              {"categoryId":"13", "dev_type":"module"},
+              {"categoryId":"14", "dev_type":"virtualdev"},
+	      {"categoryId":"15", "dev_type":"Load Balancer"},
+              {"categoryId":"16", "dev_type":"sdn_ctrl"}
+              ]
+    for i in categories:
+        print ("For "+i["dev_type"]+", Please press: "+i["categoryId"])
+
+
+
 def imc_creds():
     ''' This function prompts user for IMC server information and credentuials and stores
     values in url and auth global variables'''
@@ -188,15 +195,12 @@ def imc_creds():
 def main():
     if auth == None or url == None:  # checks to see if the imc credentials are already available
         imc_creds()
-    populate_new_view()
+    view_name = create_new_view()
+    view_list = get_custom_views()
+    view_id = get_view_id(view_name)
+    dev_list = filter_dev_category()
+    add_device_to_view(dev_list, view_id)
 
 
-
-
-    {"device":[
-        {"id": "162"},
-        {"id": "165"},
-        {"id": "168"},
-        {"id": "171"},
-        {"id": "173"}]
-     }
+if __name__ == "__main__":
+    main()
