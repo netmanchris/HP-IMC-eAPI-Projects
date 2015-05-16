@@ -49,17 +49,32 @@ def new_custom_view():
      #custom_view_id = CALL THE GET CUSTOM VIEW FUNCTION TO FIGURE THIS OUT
     # for i in DevList add to the CreateCustomView message body
 
-#json content tested with API
 
-#    modify_custom_view_url = '''/imcrs/plat/res/view/custom/'''+custom_view_id
-#    payload = {
-#  "device": [
-#    {
-#      "id": 157"
-#    }
-#    ]
-#}
 
+def populate_new_view():
+    view_name = create_new_view()
+    view_list = get_custom_views()
+    view_id = get_view_id(view_name)
+    dev_list = filter_dev_category()
+    add_device_to_view(dev_list, view_id)
+ 
+    
+
+def add_device_to_view(dev_list, view_id):
+       modify_custom_view_url = '''/imcrs/plat/res/view/custom/'''+ str(view_id)
+       device_list = []
+       for i in dev_list:
+           dev_id = {'id': i['id'] }
+           device_list.append(dev_id)          
+       payload = '''{"device":'''+ json.dumps(device_list) + '''}'''
+       f_url = url+modify_custom_view_url
+       r = requests.put(f_url, data = payload, auth=auth, headers=headers)   #creates the URL using the payload variable as the contents
+       r.status_code
+       if r.status_code == 204:
+         print ("Device Succesfully Added")
+       else:
+         print ("An Error has occured")
+    
 
 def create_new_view():
     view_name = input("Please input the name of the new view: ")
@@ -69,9 +84,16 @@ def create_new_view():
     r = requests.post(f_url, data = payload, auth=auth, headers=headers)   #creates the URL using the payload variable as the contents
     r.status_code
     if r.status_code == 201:
-         return
+         return view_name
     else:
          print ("An Error has occured")
+        
+def get_view_id(view_name):
+    view_list = get_custom_views()
+    for i in view_list:
+        if i['name'].lower() == view_name.lower():
+            view_id = i['symbolId']
+            return i['symbolId']
     
 
 
@@ -121,6 +143,12 @@ def get_custom_views():
     else:
          print ("An Error has occured")
 
+def find_a_view():
+    view_name = input("Please input the name of the view you wish to add devices to: ")
+    view_list = get_custom_views()
+    for i in view_list:
+        if i['name'].lower() == view_name.lower():
+            return i['symbolId']
 
 
 #This sections contains helper functions leveraged by other other functions
@@ -157,9 +185,18 @@ def imc_creds():
     
 #Defines the program to be run
         
-def main():            
-    add_device = input("Do you wish to perform an auto-discovery now? Y/N:")
-    if add_device.lower() == "y":
-        plat_auto_discover()
+def main():
+    if auth == None or url == None:  # checks to see if the imc credentials are already available
+        imc_creds()
+    populate_new_view()
 
-    
+
+
+
+    {"device":[
+        {"id": "162"},
+        {"id": "165"},
+        {"id": "168"},
+        {"id": "171"},
+        {"id": "173"}]
+     }
