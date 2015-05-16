@@ -25,22 +25,6 @@ auth = None
 headers = {'Accept': 'application/json', 'Content-Type': 'application/json','Accept-encoding': 'application/json'}
 
 
-
-
-#Create Custom Views from IP Address Ranges
-
-#Gather Custom View Name from the User
-
-    
-
-
-def populate_new_view():
-    view_name = create_new_view()
-    view_list = get_custom_views()
-    view_id = get_view_id(view_name)
-    dev_list = filter_dev_category()
-    add_device_to_view(dev_list, view_id)
- 
     
 
 def add_device_to_view(dev_list, view_id):
