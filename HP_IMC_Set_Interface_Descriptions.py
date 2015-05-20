@@ -11,8 +11,11 @@
 #and can be added to the standard edition through the purchase of the eAPI addon license.
 
 #This section imports required libraries
-import requests, json, sys, time, subprocess, csv, os, ipaddress
+import requests, json, sys, time, subprocess, csv, os, ipaddress, pysnmp
 from requests.auth import HTTPDigestAuth
+from pysnmp.entity.rfc3413.oneliner import cmdgen
+from pysnmp.proto import rfc1902
+cmdGen = cmdgen.CommandGenerator()
 
 
 #url header to preprend on all IMC eAPI calls
@@ -22,9 +25,17 @@ url = None
 auth = None
 
 #headers forcing IMC to respond with JSON content. XML content return is the default
-headers = {'Accept': 'application/json', 'Content-Type': 'application/json','Accept-encoding': 'application/json'}1    
+headers = {'Accept': 'application/json', 'Content-Type': 'application/json','Accept-encoding': 'application/json'}   
 
+def set_interface_descriptions():
+    link_list = get_links()['deviceLink']
+    snmp_set_list = create_snmp_input(link_list)
+    SNMP_SET_ifAlias(snmp_set_list)
+    return snmp_set_list
+    
+    
 
+    
 
 #This sections deals with getting the topology id and links and capturing them in a dictionary
 
@@ -104,10 +115,60 @@ def get_dev_interface(dev_id):
 def find_int(ifDesc, int_list):
 	for i in int_list:
 		if i["ifDescription"] == ifDesc:
-			return i["ifIndex"]         
-         
-#This sections contains helper functions leveraged by other other functions
+			return i["ifIndex"]
 
+def create_snmp_input(link_list):
+    snmp_set_list = []
+    for i in link_list:
+        right_dev ={}
+        label = i['label']
+        rightIPaddress = filter_dev_category(i['rightSymbolName'])['ip']
+        rightDevID = filter_dev_category(i['rightSymbolName'])['id']
+        right_int_list = get_dev_interface(rightDevID)
+        rightIfDesc = i['rightIfDesc']
+        rightIfIndex = find_int(rightIfDesc,right_int_list)
+        right_dev['ip'] = rightIPaddress
+        right_dev['ifIndex'] = rightIfIndex
+        right_dev['Descr'] = label
+        snmp_set_list.append(right_dev)
+        left_dev ={}
+        label = i['label']
+        leftIPaddress = filter_dev_category(i['leftSymbolName'])['ip']
+        leftDevID = filter_dev_category(i['rightSymbolName'])['id']
+        left_int_list = get_dev_interface(leftDevID)
+        leftIfDesc = i['leftIfDesc']
+        leftIfIndex = find_int(leftIfDesc,left_int_list)
+        left_dev['ip'] = rightIPaddress
+        left_dev['ifIndex'] = rightIfIndex
+        left_dev['Descr'] = label
+        snmp_set_list.append(left_dev)
+    return snmp_set_list
+
+
+# This section performs the SNMP write function to the ifALias
+
+def SNMP_SET_ifAlias(link_list):
+    
+    for i in link_list:
+        #sets function variables
+        ip_address = str(i['ip'])
+        community_string = 'private'
+        snmp_port = 161
+        ifIndex = i['ifIndex']
+        descr = i['Descr']
+        ifAlias = str("1.3.6.1.2.1.31.1.1.1.18."+ifIndex)
+        set_snmp_single(community_string, ip_address, ifAlias, descr)
+        
+        
+        
+def set_snmp_single(rwstring,ip_address,ifAlias,description):
+    from pysnmp.entity.rfc3413.oneliner import cmdgen
+    from pysnmp.proto import rfc1902
+    cmdGen = cmdgen.CommandGenerator()
+    cmdGen.setCmd(
+    cmdgen.CommunityData(rwstring),
+    cmdgen.UdpTransportTarget((ip_address, 161)),
+    (ifAlias, rfc1902.OctetString(description)))
 
 
 def imc_creds():
@@ -145,11 +206,8 @@ def imc_creds():
 def main():
     if auth == None or url == None:  # checks to see if the imc credentials are already available
         imc_creds()
-    view_name = create_new_view()
-    view_list = get_custom_views()
-    view_id = get_view_id(view_name)
-    dev_list = filter_dev_category()
-    add_device_to_view(dev_list, view_id)
+    set_interface_descriptions()
+ 
 
 
 if __name__ == "__main__":
