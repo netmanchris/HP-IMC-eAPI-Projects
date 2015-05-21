@@ -30,8 +30,8 @@ headers = {'Accept': 'application/json', 'Content-Type': 'application/json','Acc
 def set_interface_descriptions():
     link_list = get_links()['deviceLink']
     snmp_set_list = create_snmp_input(link_list)
-    SNMP_SET_ifAlias(snmp_set_list)
-    return snmp_set_list
+    snmp_set_ifAlias(snmp_set_list)
+    
     
     
 
@@ -81,7 +81,7 @@ def select_a_view():
 
 #This section correlates the device label from the topology database to a specific device id. Then correlates the ifDesc to a specific ifIndex value
 
-def filter_dev_category(dev_label):
+def filter_link_list(dev_label):
     if auth == None or url == None:  # checks to see if the imc credentials are already available
         imc_creds()
     global r
@@ -96,6 +96,12 @@ def filter_dev_category(dev_label):
          return dev_list
     else:
          print ("An Error has occured")
+
+def filter_dev_list(dev_list):
+    if type(dev_list) is dict:
+             return dev_list
+    elif type(dev_list) is list:
+             return dev_list[0]
 
 def get_dev_interface(dev_id):
     if auth == None or url == None:  # checks to see if the imc credentials are already available
@@ -122,8 +128,8 @@ def create_snmp_input(link_list):
     for i in link_list:
         right_dev ={}
         label = i['label']
-        rightIPaddress = filter_dev_category(i['rightSymbolName'])['ip']
-        rightDevID = filter_dev_category(i['rightSymbolName'])['id']
+        rightIPaddress = filter_dev_list(filter_link_list(i['rightSymbolName']))['ip']
+        rightDevID = filter_dev_list(filter_link_list(i['rightSymbolName']))['id']
         right_int_list = get_dev_interface(rightDevID)
         rightIfDesc = i['rightIfDesc']
         rightIfIndex = find_int(rightIfDesc,right_int_list)
@@ -133,8 +139,8 @@ def create_snmp_input(link_list):
         snmp_set_list.append(right_dev)
         left_dev ={}
         label = i['label']
-        leftIPaddress = filter_dev_category(i['leftSymbolName'])['ip']
-        leftDevID = filter_dev_category(i['rightSymbolName'])['id']
+        leftIPaddress = filter_dev_list(filter_link_list((i['leftSymbolName'])))['ip']
+        leftDevID = filter_dev_list(filter_link_list(i['rightSymbolName']))['id']
         left_int_list = get_dev_interface(leftDevID)
         leftIfDesc = i['leftIfDesc']
         leftIfIndex = find_int(leftIfDesc,left_int_list)
@@ -147,17 +153,21 @@ def create_snmp_input(link_list):
 
 # This section performs the SNMP write function to the ifALias
 
-def SNMP_SET_ifAlias(link_list):
-    
+def snmp_set_ifAlias(link_list):
     for i in link_list:
-        #sets function variables
-        ip_address = str(i['ip'])
-        community_string = 'private'
-        snmp_port = 161
-        ifIndex = i['ifIndex']
-        descr = i['Descr']
-        ifAlias = str("1.3.6.1.2.1.31.1.1.1.18."+ifIndex)
-        set_snmp_single(community_string, ip_address, ifAlias, descr)
+        if i['ifIndex'] is None:
+            return
+        else:
+            #sets function variables
+            ip_address = str(i['ip'])
+            community_string = 'private'
+            snmp_port = 161
+            ifIndex = i['ifIndex']
+            descr = i['Descr']
+            ifAlias = str("1.3.6.1.2.1.31.1.1.1.18."+ifIndex)
+            set_snmp_single(community_string, ip_address, ifAlias, descr)
+    
+        
         
         
         
@@ -199,6 +209,9 @@ def imc_creds():
         imc_creds()
     else:
         print ("You've successfully access the IMC eAPI")
+
+
+        
     
     
 #Defines the program to be run
