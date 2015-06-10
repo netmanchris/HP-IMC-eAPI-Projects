@@ -25,7 +25,7 @@ limitations under the License.'''
 #and can be added to the standard edition through the purchase of the eAPI addon license.
 
 #This section imports required libraries
-import requests, json, sys, time, subprocess, csv, os, ipaddress
+import requests, json, sys, time, subprocess, csv
 from requests.auth import HTTPDigestAuth
 
 
@@ -38,36 +38,20 @@ auth = None
 #headers forcing IMC to respond with JSON content. XML content return is the default
 headers = {'Accept': 'application/json', 'Content-Type': 'application/json','Accept-encoding': 'application/json'}
 
-def plat_auto_discover():
-    if auth == None or url == None:  # checks to see if the imc credentials are already available
+def create_operator():
+    if auth == None or url == None:     #checks to see if the imc credentials are already available
         imc_creds()
-    auto_discover_url = '/imcrs/plat/res/autodiscover/start'
-    f_url = url + auto_discover_url
-    network_address = input(
-        '''What is the the network address of the range you wish to discover?\nPlease input the address in the format "192.168.0.0/24": ''')
-    # end_address = input('''What is the last address of the network range you wish to discover?\nIPv4 Address: ''')
-    try:
-        network_address = ipaddress.ip_network(network_address)
-    except ValueError:
-        print("You have entered an invalid network address. Please try again.")
-        time.sleep(2)
-        print ('\n'*80)
-        plat_auto_discover()
-    payload = ''' {
-        "mode": "0",
-        "ipSection": {
-            "begin": "''' + str(network_address[1]) + '''",
-            "end": "''' + str(network_address[-2]) + '''"
-        },
-        "discoverNonSnmpDevice": "true",
-        "pingAll": "true"
-}
-'''
-    r = requests.post(f_url, data=payload, auth=auth, headers=headers)   #creates the URL using the payload variable as the contents 
-    if r.status_code == 200:
-         print ("Auto-Discovery Successfully Started")
-    else:
-         print ("An Error has occured")
+    create_operator_url = '/imcrs/plat/operator'
+    f_url = url+create_operator_url
+    with open ('imc_operator_list.csv') as csvfile:      #opens imc_operator_list.csv file
+        reader = csv.DictReader(csvfile)        #decodes file as csv as a python dictionary
+        for operator in reader:
+            payload = json.dumps(operator, indent=4)      #loads each row of the CSV as a JSON string
+            r = requests.post(f_url, data=payload, auth=auth, headers=headers)   #creates the URL using the payload variable as the contents 
+            if r.status_code == 409:        
+                print ("Operator Already Exists")
+            elif r.status_code == 201:
+                print ("Operator Successfully Created")
 
 
 #This sections contains helper functions leveraged by other other functions
@@ -91,7 +75,7 @@ def imc_creds():
     f_url = url+test_url
     try:
         r = requests.get(f_url, auth=auth, headers=headers)
-    except requests.exceptions.RequestException as e:     #checks for reqeusts exceptions
+    except requests.exceptions.RequestException as e:     #checks for requests exceptions
             print ("Error:\n"+str(e))
             print ("\n\nThe IMC server address is invalid. Please try again\n\n")
             imc_creds()
@@ -105,9 +89,9 @@ def imc_creds():
 #Defines the program to be run
         
 def main():            
-    add_device = input("Do you wish to perform an auto-discovery now? Y/N:")
-    if add_device.lower() == "y":
-        plat_auto_discover()
+    createoperator = input("Do you wish to create IMC Operators? Y/N:")
+    if createoperator == "Y" or createoperator == "y":
+        create_operator()
 
     
     
