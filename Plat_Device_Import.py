@@ -38,12 +38,12 @@ auth = None
 #headers forcing IMC to respond with JSON content. XML content return is the default
 headers = {'Accept': 'application/json', 'Content-Type': 'application/json','Accept-encoding': 'application/json'}
 
-def add_custom_view():
+def plat_import_devices():
     if auth == None or url == None:     #checks to see if the imc credentials are already available
         imc_creds()
-    add_device_url = 'http://10.3.10.230:8080/imcrs/plat/res/view/custom'
+    add_device_url = '/imcrs/plat/res/device'
     f_url = url+add_device_url
-    with open ('custom_view_list.csv') as csvfile:      #opens imc_operator_list.csv file
+    with open ('plat_device_list.csv') as csvfile:      #opens plat_device_list.csv file
         reader = csv.DictReader(csvfile)        #decodes file as csv as a python dictionary
         for device in reader:
             if int(device['authType']) == 1:
@@ -73,6 +73,7 @@ def add_custom_view():
 
         }'''
                 payload = (json.dumps(json.loads(add_device),indent = 4))
+                #print (payload)
                 r = requests.post(f_url, data=payload, auth=auth, headers=headers)   #creates the URL using the payload variable as the contents 
                 if r.status_code == 409:        
                     print ("Device Already Exists")
@@ -152,7 +153,7 @@ def imc_creds():
 def main():            
     add_device = input("Do you wish to add IMC Devices? Y/N:")
     if add_device.lower() == "y":
-        plat_import_dervice()
+        plat_import_devices()
 
     
     
