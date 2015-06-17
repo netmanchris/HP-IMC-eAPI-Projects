@@ -88,9 +88,9 @@ def imc_creds():
 #Defines the program to be run
         
 def main():            
-    add_device = input("Do you wish to perform an auto-discovery now? Y/N:")
+    add_device = input("Do you wish to display custom views now? Y/N:")
     if add_device.lower() == "y":
-        plat_auto_discover()
+        get_custom_views()
 
     
     
