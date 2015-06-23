@@ -41,6 +41,8 @@ headers = {'Accept': 'application/json', 'Content-Type': 'application/json','Acc
 
 
 def get_historical_host():
+    if auth == None or url == None:  # checks to see if the imc credentials are already available
+        imc_creds()
     get_host_url = '/imcrs/res/access/historyAccessLog?resPrivilegeFilter=false&vlanId=1&start=0&size=10&orderBy=deviceIp&desc=false&total=false'
     f_url = url+get_host_url
     r = requests.get(f_url, auth=auth, headers=headers)
@@ -112,9 +114,7 @@ def imc_creds():
         
 def main():
     print ('''\n\n==============\n\nThis tool is intended to help you change the password of an HP IMC platform\nOperator. \n\nThis tool is intended as a proof-of-concept and is provided as-is\nwith no warranty, expressed or implied\n\nThis tool is for HP internal use only and should be considered restricted\nand confidential.\n\n==============''')    
-    change_password = input("Do you wish to change an HP IMC Operator Password? Y/N:")
-    if change_password == "Y" or change_password == "y":
-        change_operator_pw()
+    get_historical_host()
     
 
     
