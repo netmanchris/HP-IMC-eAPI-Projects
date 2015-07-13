@@ -41,3 +41,20 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+basic.json
+build/exe.win-amd64-3.3/HP_IMC_Change_Operator_Password.exe
+build/exe.win-amd64-3.3/pyexpat.pyd
+build/exe.win-amd64-3.3/library.zip
+setup.py
+build/exe.win-amd64-3.3/python33.dll
+build/exe.win-amd64-3.3/pywintypes33.dll
+build/exe.win-amd64-3.3/select.pyd
+build/exe.win-amd64-3.3/unicodedata.pyd
+build/exe.win-amd64-3.3/win32api.pyd
+build/exe.win-amd64-3.3/win32wnet.pyd
+build/exe.win-amd64-3.3/_bz2.pyd
+build/exe.win-amd64-3.3/_ctypes.pyd
+build/exe.win-amd64-3.3/_hashlib.pyd
+build/exe.win-amd64-3.3/_socket.pyd
+build/exe.win-amd64-3.3/_ssl.pyd
+imc_operator_list - Copy.csv
