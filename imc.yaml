@@ -1,0 +1,378 @@
+- &id001
+  - categoryId: '1'
+    contact: admin@lab.local
+    devCategoryImgSrc: switch
+    id: '2'
+    ip: 192.168.1.221
+    label: HP_5500EI
+    link: {'@href': 'http://10.101.0.202:8080/imcrs/plat/res/device/2', '@op': GET,
+      '@rel': self}
+    location: LAB
+    mask: 255.255.255.255
+    parentId: '1'
+    status: '5'
+    statusDesc: Critical
+    symbolDesc: ''
+    symbolId: '1002'
+    symbolLevel: '2'
+    symbolName: HP_5500EI
+    symbolType: '3'
+    sysDescription: ''
+    sysName: HP_5500EI
+    sysOid: 1.3.6.1.4.1.25506.11.1.26
+    topoIconName: iconswitch
+    typeName: HP 5500-24G-PoE+-EI-2SLOT
+  - categoryId: '1'
+    contact: kontrol.issues@gmail.com
+    devCategoryImgSrc: switch
+    id: '54'
+    ip: 10.10.10.6
+    label: '2920'
+    link: {'@href': 'http://10.101.0.202:8080/imcrs/plat/res/device/54', '@op': GET,
+      '@rel': self}
+    location: Somewhere Cold
+    mask: 255.255.255.0
+    parentId: '1013'
+    status: '5'
+    statusDesc: Critical
+    symbolDesc: ''
+    symbolId: '1078'
+    symbolLevel: '3'
+    symbolName: '2920'
+    symbolType: '3'
+    sysDescription: ''
+    sysName: '2920'
+    sysOid: 1.3.6.1.4.1.11.2.3.7.8.5.3
+    topoIconName: stack
+    typeName: HP 2920 Stack
+  - categoryId: '1'
+    contact: kontrol.issues@gmail.com
+    devCategoryImgSrc: switch
+    id: '55'
+    ip: 10.10.10.4
+    label: '3800_2'
+    link: {'@href': 'http://10.101.0.202:8080/imcrs/plat/res/device/55', '@op': GET,
+      '@rel': self}
+    location: Somewhere Cold
+    mask: 255.255.255.0
+    parentId: '1013'
+    status: '5'
+    statusDesc: Critical
+    symbolDesc: ''
+    symbolId: '1084'
+    symbolLevel: '3'
+    symbolName: '3800_2'
+    symbolType: '3'
+    sysDescription: ''
+    sysName: '3800_2'
+    sysOid: 1.3.6.1.4.1.11.2.3.7.11.119
+    topoIconName: iconswitch
+    typeName: HP 3800-24G-PoE+-2SFP+ Switch
+  - categoryId: '1'
+    contact: ''
+    devCategoryImgSrc: switch
+    id: '56'
+    ip: 10.10.10.3
+    label: 3800-1
+    link: {'@href': 'http://10.101.0.202:8080/imcrs/plat/res/device/56', '@op': GET,
+      '@rel': self}
+    location: ''
+    mask: 255.255.255.0
+    parentId: '1013'
+    status: '5'
+    statusDesc: Critical
+    symbolDesc: ''
+    symbolId: '1087'
+    symbolLevel: '3'
+    symbolName: 3800-1
+    symbolType: '3'
+    sysDescription: ''
+    sysName: 3800-1
+    sysOid: 1.3.6.1.4.1.11.2.3.7.11.119
+    topoIconName: iconswitch
+    typeName: HP 3800-24G-PoE+-2SFP+ Switch
+  - categoryId: '1'
+    contact: ''
+    devCategoryImgSrc: switch
+    id: '60'
+    ip: 192.168.0.2
+    label: 5500EIBranch
+    link: {'@href': 'http://10.101.0.202:8080/imcrs/plat/res/device/60', '@op': GET,
+      '@rel': self}
+    location: ''
+    mac: 00:1e:c1:dc:f1:81
+    mask: 255.255.255.0
+    parentId: '1'
+    status: '5'
+    statusDesc: Critical
+    symbolDesc: ''
+    symbolId: '1097'
+    symbolLevel: '2'
+    symbolName: 5500EIBranch
+    symbolType: '3'
+    sysDescription: ''
+    sysName: 5500EIBranch
+    sysOid: 1.3.6.1.4.1.25506.11.1.26
+    topoIconName: iconswitch
+    typeName: HP 5500-24G-PoE+-EI-2SLOT
+  - categoryId: '1'
+    contact: ''
+    devCategoryImgSrc: switch
+    id: '68'
+    ip: 10.102.1.223
+    label: Cisco2900XL
+    link: {'@href': 'http://10.101.0.202:8080/imcrs/plat/res/device/68', '@op': GET,
+      '@rel': self}
+    location: ''
+    mac: 00:02:fd:4d:69:c0
+    mask: 255.255.255.0
+    parentId: '1106'
+    status: '5'
+    statusDesc: Critical
+    symbolDesc: ''
+    symbolId: '1107'
+    symbolLevel: '3'
+    symbolName: Cisco2900XL
+    symbolType: '3'
+    sysDescription: ''
+    sysName: Cisco2900XL
+    sysOid: 1.3.6.1.4.1.9.1.217
+    topoIconName: iconswitch
+    typeName: Cisco Catalyst 2924-XL-V
+  - categoryId: '1'
+    contact: ''
+    devCategoryImgSrc: switch
+    id: '69'
+    ip: 10.101.0.220
+    label: HP-2530-24G-PoEP
+    link: {'@href': 'http://10.101.0.202:8080/imcrs/plat/res/device/69', '@op': GET,
+      '@rel': self}
+    location: ''
+    mask: 255.255.255.0
+    parentId: '1009'
+    status: '5'
+    statusDesc: Critical
+    symbolDesc: ''
+    symbolId: '1110'
+    symbolLevel: '3'
+    symbolName: HP-2530-24G-PoEP
+    symbolType: '3'
+    sysDescription: ''
+    sysName: HP-2530-24G-PoEP
+    sysOid: 1.3.6.1.4.1.11.2.3.7.11.137
+    topoIconName: iconswitch
+    typeName: HP 2530-24G-PoE+
+  - categoryId: '1'
+    contact: ''
+    devCategoryImgSrc: switch
+    id: '70'
+    ip: 10.10.3.2
+    label: HP-5406zl
+    link: {'@href': 'http://10.101.0.202:8080/imcrs/plat/res/device/70', '@op': GET,
+      '@rel': self}
+    location: ''
+    mac: 00:26:f1:e5:e0:00
+    mask: 255.255.255.0
+    parentId: '1'
+    status: '4'
+    statusDesc: Major
+    symbolDesc: ''
+    symbolId: '1113'
+    symbolLevel: '2'
+    symbolName: HP-5406zl
+    symbolType: '3'
+    sysDescription: ''
+    sysName: HP-5406zl
+    sysOid: 1.3.6.1.4.1.11.2.3.7.11.50
+    topoIconName: iconswitch
+    typeName: HP 5406zl Switch
+  - categoryId: '1'
+    contact: kontrol.issues@gmail.com
+    devCategoryImgSrc: switch
+    id: '71'
+    ip: 10.102.1.220
+    label: HP-E2910al-24G-PoE
+    link: {'@href': 'http://10.101.0.202:8080/imcrs/plat/res/device/71', '@op': GET,
+      '@rel': self}
+    location: Somewhere Cold
+    mac: 00:24:a8:ca:51:00
+    mask: 255.255.255.0
+    parentId: '1106'
+    status: '5'
+    statusDesc: Critical
+    symbolDesc: ''
+    symbolId: '1116'
+    symbolLevel: '3'
+    symbolName: HP-E2910al-24G-PoE
+    symbolType: '3'
+    sysDescription: ''
+    sysName: HP-E2910al-24G-PoE
+    sysOid: 1.3.6.1.4.1.11.2.3.7.11.84
+    topoIconName: iconswitch
+    typeName: HP 2910al-24G-PoE+ Switch
+  - categoryId: '1'
+    contact: 830switch@lab.local
+    devCategoryImgSrc: switch
+    id: '72'
+    ip: 10.10.3.5
+    label: HP830_LSW
+    link: {'@href': 'http://10.101.0.202:8080/imcrs/plat/res/device/72', '@op': GET,
+      '@rel': self}
+    location: lab.local
+    mac: d0:7e:28:80:40:0f
+    mask: 255.255.255.0
+    parentId: '1'
+    status: '5'
+    statusDesc: Critical
+    symbolDesc: ''
+    symbolId: '1119'
+    symbolLevel: '2'
+    symbolName: HP830_LSW
+    symbolType: '3'
+    sysDescription: ''
+    sysName: HP830_LSW
+    sysOid: 1.3.6.1.4.1.11.2.3.7.15.1.3.3
+    topoIconName: iconswitch
+    typeName: HP 830-24P-LSW
+  - categoryId: '1'
+    contact: Lab@hp.int
+    devCategoryImgSrc: switch
+    id: '74'
+    ip: 10.254.0.100
+    label: switch1
+    link: {'@href': 'http://10.101.0.202:8080/imcrs/plat/res/device/74', '@op': GET,
+      '@rel': self}
+    location: WAN
+    mask: 255.255.255.255
+    parentId: '1'
+    status: '5'
+    statusDesc: Critical
+    symbolDesc: ''
+    symbolId: '1123'
+    symbolLevel: '2'
+    symbolName: switch1
+    symbolType: '3'
+    sysDescription: ''
+    sysName: switch1
+    sysOid: 1.3.6.1.4.1.9.1.614
+    topoIconName: iconswitch
+    typeName: Cisco 3560G-24PS
+  - categoryId: '1'
+    contact: admin@lab.local
+    devCategoryImgSrc: switch
+    id: '76'
+    ip: 10.254.0.101
+    label: switch2
+    link: {'@href': 'http://10.101.0.202:8080/imcrs/plat/res/device/76', '@op': GET,
+      '@rel': self}
+    location: WAN
+    mask: 255.255.255.255
+    parentId: '1'
+    status: '5'
+    statusDesc: Critical
+    symbolDesc: ''
+    symbolId: '1127'
+    symbolLevel: '2'
+    symbolName: switch2
+    symbolType: '3'
+    sysDescription: ''
+    sysName: switch2
+    sysOid: 1.3.6.1.4.1.9.1.564
+    topoIconName: iconswitch
+    typeName: Cisco Cat356048PS
+  - categoryId: '1'
+    contact: ''
+    devCategoryImgSrc: switch
+    id: '78'
+    ip: 10.254.0.102
+    label: switch3
+    link: {'@href': 'http://10.101.0.202:8080/imcrs/plat/res/device/78', '@op': GET,
+      '@rel': self}
+    location: ''
+    mask: 255.255.255.255
+    parentId: '1'
+    status: '5'
+    statusDesc: Critical
+    symbolDesc: ''
+    symbolId: '1131'
+    symbolLevel: '2'
+    symbolName: switch3
+    symbolType: '3'
+    sysDescription: ''
+    sysName: switch3
+    sysOid: 1.3.6.1.4.1.9.1.366
+    topoIconName: iconswitch
+    typeName: Cisco Catalyst 3550-24
+  - categoryId: '1'
+    contact: admin@lab.local
+    devCategoryImgSrc: switch
+    id: '80'
+    ip: 10.254.0.103
+    label: switch4
+    link: {'@href': 'http://10.101.0.202:8080/imcrs/plat/res/device/80', '@op': GET,
+      '@rel': self}
+    location: WAN
+    mask: 255.255.255.255
+    parentId: '1'
+    status: '5'
+    statusDesc: Critical
+    symbolDesc: ''
+    symbolId: '1135'
+    symbolLevel: '2'
+    symbolName: switch4
+    symbolType: '3'
+    sysDescription: ''
+    sysName: switch4
+    sysOid: 1.3.6.1.4.1.9.1.634
+    topoIconName: iconswitch
+    typeName: Cisco 3560-48TS
+  - categoryId: '1'
+    contact: 3Com Corporation.
+    devCategoryImgSrc: switch
+    id: '92'
+    ip: 10.102.1.222
+    label: '4210'
+    link: {'@href': 'http://10.101.0.202:8080/imcrs/plat/res/device/92', '@op': GET,
+      '@rel': self}
+    location: Marlborough, MA 01752 USA
+    mac: 00:1a:c1:f0:1e:32
+    mask: 255.255.255.0
+    parentId: '1106'
+    status: '5'
+    statusDesc: Critical
+    symbolDesc: ''
+    symbolId: '1171'
+    symbolLevel: '3'
+    symbolName: '4210'
+    symbolType: '3'
+    sysDescription: ''
+    sysName: '4210'
+    sysOid: 1.3.6.1.4.1.43.1.16.4.3.46
+    topoIconName: iconswitch
+    typeName: 3Com S4210 PWR 9-Port
+  - categoryId: '1'
+    contact: branch3
+    devCategoryImgSrc: switch
+    id: '94'
+    ip: 10.12.10.10
+    label: HP-3500yl-24G
+    link: {'@href': 'http://10.101.0.202:8080/imcrs/plat/res/device/94', '@op': GET,
+      '@rel': self}
+    location: Somewhere Cold
+    mac: 00:16:35:22:a7:40
+    mask: 255.255.255.0
+    parentId: '1045'
+    status: '5'
+    statusDesc: Critical
+    symbolDesc: ''
+    symbolId: '1177'
+    symbolLevel: '3'
+    symbolName: HP-3500yl-24G
+    symbolType: '3'
+    sysDescription: ''
+    sysName: HP-3500yl-24G
+    sysOid: 1.3.6.1.4.1.11.2.3.7.11.58
+    topoIconName: iconswitch
+    typeName: HP 3500yl-24G-PWR Switch
+- *id001
+- *id001
