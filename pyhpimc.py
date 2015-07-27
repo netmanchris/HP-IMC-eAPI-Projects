@@ -32,25 +32,136 @@ cmdGen = cmdgen.CommandGenerator()
 class imc_dev():
 
     def __init__(self, ip_address):
-        self.ip = dev_details(ip_address)['device']['ip']
-        self.description = dev_details(ip_address)['device']['sysDescription']
-        self.location = dev_details(ip_address)['device']['location']
-        self.contact = dev_details(ip_address)['device']['contact']
-        self.type = dev_details(ip_address)['device']['typeName']
-        self.name = dev_details(ip_address)['device']['sysName']
-        self.status = dev_details(ip_address)['device']['statusDesc']
-        self.devid = dev_details(ip_address)['device']['id']
+        self.ip = dev_details(ip_address)['ip']
+        self.description = dev_details(ip_address)['sysDescription']
+        self.location = dev_details(ip_address)['location']
+        self.contact = dev_details(ip_address)['contact']
+        self.type = dev_details(ip_address)['typeName']
+        self.name = dev_details(ip_address)['sysName']
+        self.status = dev_details(ip_address)['statusDesc']
+        self.devid = dev_details(ip_address)['id']
 
         self.interfacelist = dev_interface(self.devid)
         self.numinterface = len(dev_interface(self.devid))
         self.vlans = dev_vlans(self.devid)['vlan']
+        self.accessinterfaces = get_device_access_interfaces(self.devid)['accessIf']
+        self.trunkinterfaces = get_trunk_interfaces(self.devid)['trunkIf']
         self.alarm = dev_alarms(self.devid)['alarm']
         self.numalarm = len(dev_alarms(self.devid)['alarm'])
-        #self.serial = None
+        self.serial = get_serial_numbers(get_dev_asset_details(self.ip)['netAsset'])
         self.runconfig = dev_run_config(self.devid)
         self.startconfig = None
 
+class imc_interface():
+    def __init__(self, ip_address, ifIndex):
+        self.ip = dev_details(ip_address)['device']['ip']
+        self.devid = dev_details(ip_address)['device']['id']
+        self.ifIndex = get_interface_details(self.devid, ifIndex)['ifIndex']
+        self.macaddress = get_interface_details(self.devid, ifIndex)['phyAddress']
+        self.status = get_interface_details(self.devid, ifIndex)['statusDesc']
+        self.adminstatus = get_interface_details(self.devid, ifIndex)['adminStatusDesc']
+        self.name = get_interface_details(self.devid, ifIndex)['ifDescription']
+        self.description = get_interface_details(self.devid, ifIndex)['ifAlias']
+        self.mtu = get_interface_details(self.devid, ifIndex)['mtu']
+        self.speed = get_interface_details(self.devid, ifIndex)['ifspeed']
+        self.accessinterfaces = get_device_access_interfaces(self.devid)['accessIf']
+        self.pvid = get_access_interface_vlan(self.ifIndex, self.accessinterfaces)
 
+def get_dev_asset_details(ipAddress):
+       # checks to see if the imc credentials are already available
+    if auth == None or url == None:
+        imc_creds()
+    global r
+    get_dev_asset_url = "/imcrs/netasset/asset?assetDevice.ip="+ipAddress
+    f_url = url + get_dev_asset_url
+    payload = None
+    # creates the URL using the payload variable as the contents
+    r = requests.get(f_url, auth=auth, headers=headers)
+    r.status_code
+    if r.status_code == 200:
+        dev_asset_info = (json.loads(r.text))
+        return dev_asset_info
+    else:
+        print("get_dev_asset_details:  An Error has occured")    
+
+def get_serial_numbers(assetList):
+    serial_list = []
+    for i in assetList:
+        if len(i['serialNum']) > 0:
+            serial_list.append(i)
+    return serial_list
+
+def get_trunk_interfaces(devId):
+       # checks to see if the imc credentials are already available
+    if auth == None or url == None:
+        imc_creds()
+    global r
+    get_trunk_interfaces_url = "/imcrs/vlan/trunk?devId="+devId+"&start=1&size=5000&total=false"
+    f_url = url + get_trunk_interfaces_url
+    payload = None
+    # creates the URL using the payload variable as the contents
+    r = requests.get(f_url, auth=auth, headers=headers)
+    r.status_code
+    if r.status_code == 200:
+        dev_trunk_interfaces = (json.loads(r.text))
+        if len(dev_trunk_interfaces) == 2:
+            return dev_trunk_interfaces
+        else:
+            dev_trunk_interfaces['trunkIf'] = "No trunk inteface"
+            return dev_trunk_interfaces
+        dev_trunk_interfaces = (json.loads(r.text))['trunkIf']
+    
+def get_access_interface_vlan(ifIndex, accessinterfacelist):
+    for i in accessinterfacelist:
+        if i['ifIndex'] == ifIndex:
+            return i['pvid']
+        else:
+            return "Not an Access Port"
+
+def get_device_access_interfaces(devId):
+       # checks to see if the imc credentials are already available
+    if auth == None or url == None:
+        imc_creds()
+    global r
+    get_access_interface_vlan_url = "/imcrs/vlan/access?devId="+devId+"&start=1&size=500&total=false"
+    f_url = url + get_access_interface_vlan_url
+    payload = None
+    # creates the URL using the payload variable as the contents
+    r = requests.get(f_url, auth=auth, headers=headers)
+    r.status_code
+    if r.status_code == 200:
+        dev_access_interfaces = (json.loads(r.text))
+        if len(dev_access_interfaces) == 2:
+            return dev_access_interfaces
+        else:
+            dev_access_interfaces['accessIf'] = "No access inteface"
+            return dev_access_interfaces
+    else:
+        print("get_device_access_interfaces: An Error has occured")
+        
+
+
+
+
+
+def get_interface_details(devId, ifIndex):
+       # checks to see if the imc credentials are already available
+    if auth == None or url == None:
+        imc_creds()
+    global r
+    get_interface_details_url = "/imcrs/plat/res/device/"+devId+"/interface/"+ifIndex
+    f_url = url + get_interface_details_url
+    payload = None
+    # creates the URL using the payload variable as the contents
+    r = requests.get(f_url, auth=auth, headers=headers)
+    r.status_code
+    if r.status_code == 200:
+        dev_details = (json.loads(r.text))
+        return dev_details
+    else:
+        print("get_interface_details: An Error has occured")
+
+    
 def dev_details(ip_address):
     # checks to see if the imc credentials are already available
     if auth == None or url == None:
@@ -65,9 +176,15 @@ def dev_details(ip_address):
     r.status_code
     if r.status_code == 200:
         dev_details = (json.loads(r.text))
-        return dev_details
+        if type(dev_details['device']) == list:
+            for i in dev_details['device']:
+                if i['ip'] == ip_address:
+                    dev_details = i
+                    return dev_details
+        elif type(dev_details['device']) == dict:
+            return dev_details['device']
     else:
-        print("An Error has occured")
+        print("dev_details: An Error has occured")
 
 
 def dev_vlans(devId):
@@ -85,8 +202,11 @@ def dev_vlans(devId):
     if r.status_code == 200:
         dev_details = (json.loads(r.text))
         return dev_details
+    elif r.status_code == 409:
+        return {'vlan':'no vlans'}
     else:
-        print("An Error has occured")
+        print("dev_vlans: An Error has occured")
+        
 
 
 def dev_interface(dev_id):
