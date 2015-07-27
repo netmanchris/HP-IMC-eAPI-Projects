@@ -54,8 +54,8 @@ class imc_dev():
 
 class imc_interface():
     def __init__(self, ip_address, ifIndex):
-        self.ip = dev_details(ip_address)['device']['ip']
-        self.devid = dev_details(ip_address)['device']['id']
+        self.ip = dev_details(ip_address)['ip']
+        self.devid = dev_details(ip_address)['id']
         self.ifIndex = get_interface_details(self.devid, ifIndex)['ifIndex']
         self.macaddress = get_interface_details(self.devid, ifIndex)['phyAddress']
         self.status = get_interface_details(self.devid, ifIndex)['statusDesc']
