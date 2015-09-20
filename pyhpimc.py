@@ -50,7 +50,7 @@ class imc_dev():
         self.numalarm = len(dev_alarms(self.devid)['alarm'])
         self.serial = get_serial_numbers(get_dev_asset_details(self.ip)['netAsset'])
         self.runconfig = dev_run_config(self.devid)
-        self.startconfig = None
+        self.startconfig = dev_start_config(self.devid)
 
 class imc_interface():
     def __init__(self, ip_address, ifIndex):
@@ -67,6 +67,19 @@ class imc_interface():
         self.accessinterfaces = get_device_access_interfaces(self.devid)['accessIf']
         self.pvid = get_access_interface_vlan(self.ifIndex, self.accessinterfaces)
 
+class host(imc_dev):
+    def __init__(self, ip_address):
+        self.hostip = real_time_locate(ip_address)['locateIp']
+        self.deviceip = real_time_locate(ip_address)['deviceIp']
+        self.ifIndex = real_time_locate(ip_address)['ifIndex']
+        self.devid = real_time_locate(ip_address)['deviceId']
+        self.accessinterfaces = get_device_access_interfaces(self.devid)['accessIf']
+        self.pvid = get_access_interface_vlan(self.ifIndex, self.accessinterfaces)
+        self.devstatus = dev_details(self.deviceip)['statusDesc']
+        self.status = get_interface_details(self.devid, self.ifIndex)['statusDesc']
+
+
+        
 def get_dev_asset_details(ipAddress):
        # checks to see if the imc credentials are already available
     if auth == None or url == None:
@@ -86,9 +99,10 @@ def get_dev_asset_details(ipAddress):
 
 def get_serial_numbers(assetList):
     serial_list = []
-    for i in assetList:
-        if len(i['serialNum']) > 0:
-            serial_list.append(i)
+    if type(assetList) == list:
+        for i in assetList:
+            if len(i['serialNum']) > 0:
+                serial_list.append(i)
     return serial_list
 
 def get_trunk_interfaces(devId):
@@ -275,6 +289,19 @@ def dev_alarms(devId):
     if r.status_code == 200:
         dev_alarm = (json.loads(r.text))
         return dev_alarm
+
+def real_time_locate(ipAddress):
+    if auth == None or url == None:  # checks to see if the imc credentials are already available
+        imc_creds()
+    real_time_locate_url = "/imcrs/res/access/realtimeLocate?type=2&value="+ipAddress+"&total=false"
+    f_url = url + real_time_locate_url
+    r = requests.get(f_url, auth=auth, headers=headers)   #creates the URL using the payload variable as the contents
+    if r.status_code == 200:
+        return (json.loads(r.text)['realtimeLocation'])
+          
+    else:
+     print (r.status_code)
+     print ("An Error has occured")
 
 
 # url header to preprend on all IMC eAPI calls

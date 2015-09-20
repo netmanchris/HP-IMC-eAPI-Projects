@@ -151,16 +151,18 @@ def get_dev_interface(dev_id):
     r = requests.get(f_url, auth=auth, headers=headers)
     r.status_code
     if r.status_code == 200:
-        int_list = (json.loads(r.text))['interface']
-        return int_list
+        if len(r.text) > 2:
+            int_list = (json.loads(r.text))['interface']
+            return int_list
     else:
         print("An Error has occured")
 
 
 def find_int(ifDesc, int_list):
-    for i in int_list:
-        if i["ifDescription"] == ifDesc:
-            return i["ifIndex"]
+    if int_list != None:
+        for i in int_list:
+            if i["ifDescription"] == ifDesc:
+                return i["ifIndex"]
 
 
 def create_snmp_input(link_list):
@@ -184,12 +186,12 @@ def create_snmp_input(link_list):
         leftIPaddress = filter_dev_list(
             filter_link_list((i['leftSymbolName'])))['ip']
         leftDevID = filter_dev_list(
-            filter_link_list(i['rightSymbolName']))['id']
+            filter_link_list(i['leftSymbolName']))['id']
         left_int_list = get_dev_interface(leftDevID)
         leftIfDesc = i['leftIfDesc']
         leftIfIndex = find_int(leftIfDesc, left_int_list)
-        left_dev['ip'] = rightIPaddress
-        left_dev['ifIndex'] = rightIfIndex
+        left_dev['ip'] = leftIPaddress
+        left_dev['ifIndex'] = leftIfIndex
         left_dev['Descr'] = label
         snmp_set_list.append(left_dev)
     return snmp_set_list
@@ -200,7 +202,9 @@ def create_snmp_input(link_list):
 def snmp_set_ifAlias(link_list):
     for i in link_list:
         if i['ifIndex'] is None:
-            return
+            continue
+        elif i['ifIndex'] is "null":
+            continue
         else:
             # sets function variables
             ip_address = str(i['ip'])
