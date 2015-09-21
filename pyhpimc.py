@@ -51,6 +51,7 @@ class imc_dev():
         self.serial = get_serial_numbers(get_dev_asset_details(self.ip)['netAsset'])
         self.runconfig = dev_run_config(self.devid)
         self.startconfig = dev_start_config(self.devid)
+        self.ipmacarp = get_ip_mac_arp_list(self.devid)
 
 class imc_interface():
     def __init__(self, ip_address, ifIndex):
@@ -76,7 +77,7 @@ class host(imc_dev):
         self.accessinterfaces = get_device_access_interfaces(self.devid)['accessIf']
         self.pvid = get_access_interface_vlan(self.ifIndex, self.accessinterfaces)
         self.devstatus = dev_details(self.deviceip)['statusDesc']
-        self.status = get_interface_details(self.devid, self.ifIndex)['statusDesc']
+        self.intstatus = get_interface_details(self.devid, self.ifIndex)['statusDesc']
 
 
         
@@ -182,7 +183,7 @@ def dev_details(ip_address):
         imc_creds()
     global r
     get_dev_details_url = "/imcrs/plat/res/device?resPrivilegeFilter=false&ip=" + \
-        ip_address + "&start=0&size=10&orderBy=id&desc=false&total=false"
+        ip_address + "&start=0&size=1000&orderBy=id&desc=false&total=false"
     f_url = url + get_dev_details_url
     payload = None
     # creates the URL using the payload variable as the contents
@@ -304,6 +305,37 @@ def real_time_locate(ipAddress):
      print ("An Error has occured")
 
 
+def get_ip_mac_arp_list(devId):
+    if auth == None or url == None:  # checks to see if the imc credentials are already available
+        imc_creds()
+    ip_mac_arp_list_url = "/imcrs/res/access/ipMacArp/"+devId
+    f_url = url + ip_mac_arp_list_url
+    r = requests.get(f_url, auth=auth, headers=headers)   #creates the URL using the payload variable as the contents
+    if r.status_code == 200:
+        macarplist = (json.loads(r.text))
+        if len(macarplist) > 1:
+            return macarplist['ipMacArp']
+        else:
+            return ('this function is unsupported')
+
+    else:
+     print (r.status_code)
+     print ("An Error has occured")
+
+def create_dev_vlan(devid, vlanid, vlan_name):
+    if auth == None or url == None:  # checks to see if the imc credentials are already available
+        imc_creds()
+    create_dev_vlan_url = "/imcrs/vlan?devId="+devid
+    f_url = url + create_dev_vlan_url
+    payload = '''{ "vlanId": "''' + vlanid + '''", "vlanName" : "'''+vlan_name+'''"}'''
+    r = requests.post(f_url, data=payload, auth=auth,
+                      headers=headers)  # creates the URL using the payload variable as the contents
+    print (r.status_code)
+    if r.status_code == 201:
+        return r.status_code
+    else:
+        print("An Error has occured")
+    
 # url header to preprend on all IMC eAPI calls
 url = None
 
